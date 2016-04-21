@@ -14,32 +14,43 @@ import java.net.URL;
 public class URLReader implements Reader
 {
 
+	public String name;
+	public int numLines;
+	public String[] buffer = new String[1000000];
+	
+	
 	@Override
 	public String[] getLines() throws IOException 
 	{
-		return null;
+		
+		URL url = new URL(name);
+		InputStreamReader isr = new InputStreamReader (url.openStream());
+		BufferedReader br = new BufferedReader (isr);
+		String line;
+		numLines = 0;
+		while ((line = br.readLine()) != null)
+		{
+			buffer[numLines++] = line;
+		}
+		br.close();
+		isr.close();
+		return (buffer);
 	}
 
 	@Override
 	public int getNumberOfLines() throws IOException 
 	{
-		return 0;
+		return numLines;
 	}
 
 	@Override
 	public String getName() 
 	{
-		return null;
+		return name;
 	}
-	
-	public static void readURL () throws IOException
+
+	public URLReader (String webSite) throws IOException
 	{
-		MakeReader mr = new MakeReader();
-		//String ifURL = mr.);
-		//if (ifURL == "http")
-		{
-			
-		}
+		name = webSite;
 	}
-	
 }

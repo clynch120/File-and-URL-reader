@@ -1,6 +1,7 @@
 package fileAndURL;
 /**
  * @author Charles
+ * 
  * Make the list of files for FileReader or URLReaker 
  */
 import java.io.BufferedReader;
@@ -11,30 +12,31 @@ import java.io.IOException;
 public class MakeReader 
 {
 	
-	public static String [] read() throws IOException
+	public Reader[] readers = new Reader[100];
+	public int total = 0;
+	
+	public MakeReader(String fileToUse) throws IOException
 	{
 		String s;
-		int i = 0;
-		String [] a = new String [10];
-		String fileList = "C:\\Users\\Charles\\Desktop\\file.txt";
-
-		FileReader fr = new FileReader(new File (fileList));
+		FileReader fr = new FileReader(new File (fileToUse));
 		BufferedReader br = new BufferedReader(fr);
+		
 		while ((s = br.readLine()) != null)
 		{
 			s = s.toLowerCase();
-			if (s.startsWith("h") || s.startsWith("f"))
+			if (s.startsWith("#")) continue;
+			if (s.startsWith("http"))
 			{
-				a[i] = s;
-				i++;
+				readers[total++] = new URLReader(s);
+				//System.out.println(s);
 			}
-			System.out.println(s);
-			System.out.println(a[i]);
+			else if (s.startsWith("c:"))
+			{
+				readers[total++] = new ReadFile(s);
+				System.out.println(s);
+			}
 		}
-		System.out.println(a);
 		fr.close();
 		br.close();
-		return a;
-
 	}
 }
